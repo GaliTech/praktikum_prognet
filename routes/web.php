@@ -12,13 +12,32 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'welcome');
+Auth::routes();
+
+Route::get('/login/admin', [LoginController::class,'showAdminLoginForm']);
+Route::get('/login/user', [LoginController::class,'showUserLoginForm']);
+Route::get('/register/admin', [RegisterController::class,'showAdminRegisterForm']);
+Route::get('/register/user', [RegisterController::class,'showUserRegisterForm']);
+
+Route::post('/login/admin', [LoginController::class,'adminLogin']);
+Route::post('/login/user', [LoginController::class,'userLogin']);
+Route::post('/register/admin', [RegisterController::class,'createAdmin']);
+Route::post('/register/user', [RegisterController::class,'createUser']);
+
+Route::group(['middleware' => 'auth:user'], function () {
+    Route::view('/user', 'user');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::group(['middleware' => 'auth:admin'], function () {
+    Route::view('/admin', 'admin');
+});
 
-require __DIR__.'/auth.php';
+Route::get('logout', [LoginController::class,'logout']);
+Auth::routes();
+
+Route::get('/home-user', [App\Http\Controllers\HomeController::class, 'user'])->name('home');
+Route::get('/home-admin', [App\Http\Controllers\HomeController::class, 'admin'])->name('home');
