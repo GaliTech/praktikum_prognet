@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin-Login</title>
+    <title>Login</title>
 
     <!-- Custom fonts for this template-->
     <link href={{asset("vendor/fontawesome-free/css/all.min.css")}} rel="stylesheet" type="text/css">
@@ -50,10 +50,10 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Hai Boss!</h1>
                                     </div>
-                                    <form method="POST" action="{{ route('login') }}">
+                                    <form action="{{route('login.admin.submit')}}" method="POST">
                                         @csrf
                                         <div class="form-group">
-                                            <input id="username" type="username" placeholder="Enter username Address..." class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                                            <input id="username" type="username" placeholder="Enter Username" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
                                             @error('username')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

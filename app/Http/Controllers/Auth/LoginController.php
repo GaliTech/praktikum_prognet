@@ -29,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home-user';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -46,26 +46,28 @@ class LoginController extends Controller
 
      public function showAdminLoginForm()
     {
-        return view('auth.loginAdmin', ['url' => 'admin']);
+        return view('auth.loginAdmin');
     }
 
     public function adminLogin(Request $request)
     {
         $this->validate($request, [
-            'username'   => 'required|username',
-            'password' => 'required|min:6'
+            'username'   => 'required|string',
+            'password' => 'required|string|min:6'
         ]);
 
         if (Auth::guard('admin')->attempt(['username' => $request->username, 'password' => $request->password], $request->get('remember'))) {
-
             return redirect()->intended('/admin');
+        }else {
+            return redirect()->back()->withInput($request->only('username','remember'));
         }
-        return back()->withInput($request->only('username', 'remember'));
     }
 
+
+    //User Login
      public function showUserLoginForm()
     {
-        return view('auth.loginUser', ['url' => 'user']);
+        return view('auth.login');
     }
 
     public function userLogin(Request $request)
@@ -76,9 +78,13 @@ class LoginController extends Controller
         ]);
 
         if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
-
+            //redirect jika sukses login
+            // dd('Berhasil');
+            // return view('beranda');
             return redirect()->intended('/user');
+        }else {
+             //redirect jika gagal login
+            return redirect()->back()->withInput($request->only('email','remember'));
         }
-        return back()->withInput($request->only('email', 'remember'));
-    }
+    }   
 }
