@@ -193,7 +193,20 @@
         <div class="brand-bg">
             <div class="container">
                 <div class="row">
+                    @foreach ($products_data as $item)
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 margin">
+                        <div class="brand_box">
+                            @php
+                                $images = DB::table('product_images')->where('product_id','=',$item->id)->get();
+                            @endphp
+                                <img src="{{asset('image/'.$images[0]->image_name)}}" alt="">
+                            {{-- <img src={{asset('template_user/image/vivoy17.jpg')}} alt="img" /> --}}
+                            <h3><strong class="red">Rp{{number_format($item->price)}}</strong></h3>
+                            <h4><a href="/detail_produk/{{$item->id}}">{{$item->product_name}}</a></h4>
+                        </div>
+                    </div>
+                    @endforeach
+                    {{-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 margin">
                         <div class="brand_box">
                             <img src={{asset('template_user/image/1.png')}} alt="img" />
                             <h3>$<strong class="red">100</strong></h3>
@@ -258,7 +271,7 @@
                             <i><img src={{asset('template_user/image/star.png')}}/></i>
                             <i><img src={{asset('template_user/image/star.png')}}/></i>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-12">
                         <a class="read-more" href="#">See More</a>
                     </div>

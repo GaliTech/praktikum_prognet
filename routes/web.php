@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeDetailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
+
+Route::get('/', 'App\Http\Controllers\HomeDetailController@index')->name('home');
+Route::get('/detail_produk/{id}', 'App\Http\Controllers\HomeDetailController@detail_product');
 
 Route::group(['middleware' => 'auth:user'], function () {
     Route::view('/user', 'beranda');
+    Route::get('/keranjang', 'App\Http\Controllers\HomeDetailController@keranjang')->name('belanja');
 });
 
 Route::group(['middleware' => 'auth:admin'], function () {
@@ -30,6 +35,14 @@ Route::group(['middleware' => 'auth:admin'], function () {
 require __DIR__.'/auth.php';
 
 
+
+
+Route::get('/about', function () {
+    return view('about');
+});
+Route::get('/contact_us', function () {
+    return view('contact_us');
+});
 
 //List Route untuk CRUD Admin
 Route::resource('/product','App\Http\Controllers\ProductController')->middleware('auth:admin');;
