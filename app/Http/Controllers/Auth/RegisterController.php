@@ -85,7 +85,7 @@ class RegisterController extends Controller
         // return redirect(RouteServiceProvider::HOME);
 
         
-        return redirect()->intended('/verify-email');
+        return view('auth.verifikasi');
         // return view('auth.verify-email');
         // return redirect()->intended('verification-verify');
         // return redirect('/verify-email');

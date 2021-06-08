@@ -21,7 +21,6 @@ active
                     <tr>
                         <th class="text-center">No</th>
                         <th class="text-center">Nama Produk</th>
-                        <th class="text-center">Rate</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -30,7 +29,6 @@ active
                     <tr>
                         <td class="text-center">{{$loop->iteration}}</td>
                         <td>{{$product->product_name}}</td>
-                        <td>Rate</td>
                         <td class="text-center">
                             <form action="/product/{{$product->id}}" method="POST" id="form_delete">
                                 @csrf

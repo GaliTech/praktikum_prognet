@@ -57,7 +57,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::guard('admin')->attempt(['username' => $request->username, 'password' => $request->password], $request->get('remember'))) {
-            return redirect()->intended('/admin');
+            return redirect()->intended('/dashboard');
         }else {
             return redirect()->back()->withInput($request->only('username','remember'));
         }

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <!-- site metas -->
-    <title>Toko Elektronik | Home</title>
+    <title>Toko Elektronik</title>
     <link rel="icon" href={{asset('template_user/icon/logo_toko.png')}}>
     <meta name="keywords" content="">
     <meta name="description" content="">
@@ -65,10 +65,26 @@
                                 <nav class="main-menu">
                                     <ul class="menu-area-main">
                                         <li class="active"> <a href="/">Home</a> </li>
-                                        <li> <a href="/about">About</a> </li>
-                                        <li><a href="/contact_us">Contact Us</a></li>
-                                        <li><a href="{{ route('register') }}">Sign Up</a></li>
-                                        <li><a href="{{ route('login') }}">Login</a></li>
+                                        {{-- <li> <a href="/about">About</a> </li>
+                                        <li><a href="/contact_us">Contact Us</a></li> --}}
+                                        @php $user = Auth::user() @endphp
+                                        @if (isset($user))
+                                            <li><a href="{{route('cart')}}">Cart</a></li>
+                                            <li>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    {{ Auth::user()->name }}
+                                                    </button>
+                                                    <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item p-3" href="{{ route('myorder') }}}}">My Order</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li><a href="{{route('user.logout')}}">Logout</a></li>
+                                        @else
+                                            <li><a href="{{ route('register') }}">Sign Up</a></li>
+                                            <li><a href="{{ route('login') }}">Login</a></li>
+                                        @endif
                                         <li class="last">
                                             <a href="#"><img src={{asset('template_user/image/search_icon.png')}} alt="icon" /></a>
                                         </li>
@@ -200,9 +216,8 @@
                                 $images = DB::table('product_images')->where('product_id','=',$item->id)->get();
                             @endphp
                                 <img src="{{asset('image/'.$images[0]->image_name)}}" alt="">
-                            {{-- <img src={{asset('template_user/image/vivoy17.jpg')}} alt="img" /> --}}
                             <h3><strong class="red">Rp{{number_format($item->price)}}</strong></h3>
-                            <h4><a href="/detail_produk/{{$item->id}}">{{$item->product_name}}</a></h4>
+                            <h1><a href="/detail_produk/{{$item->id}}">{{$item->product_name}}</a></h1>
                         </div>
                     </div>
                     @endforeach

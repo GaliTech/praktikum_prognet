@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <!-- site metas -->
-    <title>Toko Elektronik | Home</title>
+    <title>Toko Elektronik</title>
     <link rel="icon" href={{asset('template_user/icon/logo_toko.png')}}>
     <meta name="keywords" content="">
     <meta name="description" content="">
@@ -34,6 +34,7 @@
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <link href={{asset('template/vendor/fontawesome-free/css/all.min.css')}} rel="stylesheet" type="text/css">
 </head>
 <!-- body -->
 
@@ -64,13 +65,57 @@
                             <div class="limit-box">
                                 <nav class="main-menu">
                                     <ul class="menu-area-main">
-                                        <li class="active"> <a href="/">Home</a> </li>
-                                        <li> <a href="/about">About</a> </li>
-                                        <li><a href="/contact_us">Contact Us</a></li>
-                                        <li><a><div>{{ Auth::user()->name }}</div></a></li>
+                                        <li class="active"> <a href="/user">Home</a> </li>
+                                        {{-- <li> <a href="/about">About</a> </li>
+                                        <li><a href="/contact_us">Contact Us</a></li> --}}
+                                        <li><a href="{{route('cart')}}">Cart</a></li>
+                                        <li>
+                                            <div class="dropdown">
+                                                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                {{ Auth::user()->name }}
+                                                </button>
+                                                <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item p-3" href="{{ route('myorder') }}">My Order</a>
+                                                </div>
+                                            </div>
+                                        </li>
                                         <li><a href="{{route('user.logout')}}">Logout</a></li>
-                                        <li class="last">
-                                            <a href="#"><img src={{asset('template_user/image/search_icon.png')}} alt="icon" /></a>
+                                        <!-- Nav Item - Messages -->
+                                        <li class="nav-item dropdown no-arrow mx-1">
+                                            @php $unread = \App\Models\UserNotifications::where('notifiable_id', Auth::user()->id)->where('read_at', NULL)->orderBy('created_at','desc')->count(); @endphp
+                                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-envelope fa-fw"></i>
+                                                <!-- Counter - Messages -->
+                                                <span class="badge badge-danger badge-counter">@php echo $unread @endphp+</span>
+                                            </a>
+                                            <!-- Dropdown - Messages -->
+                                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                                aria-labelledby="messagesDropdown">
+                                                <h6 class="dropdown-header">
+                                                    Notification Center
+                                                </h6>
+                                                @php $user_notifikasi = \App\Models\UserNotifications::where('notifiable_id', Auth::user()->id)->where('read_at', NULL)->orderBy('created_at','desc')->get(); @endphp
+                                                @forelse ($user_notifikasi as $notifikasi)
+                                                    @php $notif = json_decode($notifikasi->data); @endphp
+                                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('user.notification', $notifikasi->id) }}">
+                                                        <div class="dropdown-list-image mr-3">
+                                                            <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="">
+                                                            <div class="status-indicator bg-success"></div>
+                                                        </div>
+                                                        <div class="font-weight-bold">
+                                                            <div class="text-truncate text-dark">{{ $notif->message }}</div>
+                                                            <div class="small text-secondary">{{ $notif->nama }}</div>
+                                                        </div>
+                                                    </a>
+                                                @empty
+                                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                                        <div class="font-weight-bold">
+                                                            <div class="small text-secondary">Tidak Ada Notifikasi</div>
+                                                        </div>
+                                                    </a>
+                                                @endforelse
+                                            </div>
                                         </li>
                                     </ul>
                                 </nav>
@@ -193,18 +238,19 @@
         <div class="brand-bg">
             <div class="container">
                 <div class="row">
+                    @foreach ($products_data as $item)
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 margin">
                         <div class="brand_box">
-                            <img src={{asset('template_user/image/1.png')}} alt="img" />
-                            <h3>$<strong class="red">100</strong></h3>
-                            <span>Mobile Phone</span>
-                            <i><img src={{asset('template_user/image/star.png')}}/></i>
-                            <i><img src={{asset('template_user/image/star.png')}}/></i>
-                            <i><img src={{asset('template_user/image/star.png')}}/></i>
-                            <i><img src={{asset('template_user/image/star.png')}}/></i>
+                            @php
+                                $images = DB::table('product_images')->where('product_id','=',$item->id)->get();
+                            @endphp
+                                <img src="{{asset('image/'.$images[0]->image_name)}}" alt="">
+                            <h3><a href="/detail_produk/{{$item->id}}"><strong class="red">Rp{{number_format($item->price)}}</strong></a></h3>
+                            <h4><a href="/detail_produk/{{$item->id}}">{{$item->product_name}}</a></h4>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 margin">
+                    @endforeach
+                    {{-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 margin">
                         <div class="brand_box">
                             <img src={{asset('template_user/image/2.png')}} alt="img" />
                             <h3>$<strong class="red">100</strong></h3>
@@ -258,7 +304,7 @@
                             <i><img src={{asset('template_user/image/star.png')}}/></i>
                             <i><img src={{asset('template_user/image/star.png')}}/></i>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-12">
                         <a class="read-more" href="#">See More</a>
                     </div>

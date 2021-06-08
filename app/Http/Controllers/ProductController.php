@@ -158,7 +158,7 @@ class ProductController extends Controller
             $productCategoryDetail->updated_at = Carbon::now()->format('Y-m-d H:i:s');
             $productCategoryDetail->save();
         }
-        return redirect('/product')->with('berhasil','Data produk berhasil diupdate!');
+        return redirect('/product/'.$id)->with('berhasil','Data produk berhasil diupdate!');
     }
 
     public function updateGambar(Request $request,$id)

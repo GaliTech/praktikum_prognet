@@ -17,6 +17,7 @@ class LogoutController extends Controller
 
         $request->session()->regenerateToken();
 
+        // return view('home');
         return redirect('/');
     }
 
@@ -28,6 +29,6 @@ class LogoutController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login/admin');
+        return redirect('/admin/login');
     }
 }
